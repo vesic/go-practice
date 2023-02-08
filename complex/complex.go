@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 	"sort"
+	"time"
 )
 
 // Perform sorting on slices using the sort package.
@@ -37,4 +38,31 @@ func wordFrequency() {
 		"be", "and", "of", "to", "have", "be", "and", "of",
 	})
 	fmt.Printf("%#v\n", sorted)
+}
+
+// using struct
+func UsingStructs() {
+	type Event struct {
+		id   string
+		time time.Time
+	}
+
+	NewEvent := func(id string) (*Event, error) {
+		if id == "" {
+			return nil, fmt.Errorf("empty id")
+		}
+		evt := Event{id, time.Now()}
+		return &evt, nil
+	}
+
+	evt1, err := NewEvent("")
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println(evt1)
+	}
+
+	if err2, err := NewEvent("earthquake"); err == nil {
+		fmt.Println(err2)
+	}
 }
