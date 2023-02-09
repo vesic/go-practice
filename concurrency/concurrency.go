@@ -2,6 +2,7 @@ package concurrency
 
 import (
 	"fmt"
+	"math/rand"
 	"sync"
 	"time"
 )
@@ -36,4 +37,23 @@ func SyncWait() {
 	wg.Wait()
 
 	fmt.Println("Done!")
+}
+
+// Communication with channels.
+func Channels1() {
+	c1 := make(chan int)
+	c2 := make(chan int)
+
+	go func() {
+		fmt.Println("send to c1")
+		c1 <- rand.Intn(100)
+	}()
+
+	go func() {
+		fmt.Println("send to c2")
+		c2 <- rand.Intn(100)
+	}()
+
+	fmt.Println("rcv from c1", <-c1)
+	fmt.Println("rcv from c2", <-c2)
 }
