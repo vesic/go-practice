@@ -57,3 +57,56 @@ func Channels1() {
 	fmt.Println("rcv from c1", <-c1)
 	fmt.Println("rcv from c2", <-c2)
 }
+
+// Receive values using range expression.
+func Channels2() {
+	var wg sync.WaitGroup
+	c1 := make(chan int)
+	c2 := make(chan int)
+	wg.Add(2)
+
+	go func() {
+		defer wg.Done()
+		for i := 0; i < 10; i++ {
+			time.Sleep(500 * time.Millisecond)
+			c1 <- rand.Intn(100)
+		}
+		close(c1)
+	}()
+
+	go func() {
+		defer wg.Done()
+		for i := 0; i < 10; i++ {
+			time.Sleep(500 * time.Millisecond)
+			c2 <- rand.Intn(100)
+		}
+		close(c2)
+	}()
+
+	even := func(val int) {
+		fmt.Printf("even(%v) = %v\n", val, val)
+	}
+
+	odd := func(val int) {
+		fmt.Printf("odd(%v) = %v\n", val, val)
+	}
+
+	for val := range c1 {
+		if val%2 == 0 {
+			even(val)
+		} else {
+			odd(val)
+		}
+	}
+
+	for val := range c2 {
+		if val%2 == 0 {
+			even(val)
+		} else {
+			odd(val)
+		}
+
+	}
+
+	wg.Wait()
+}
