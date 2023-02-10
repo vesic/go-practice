@@ -110,3 +110,26 @@ func Channels2() {
 
 	wg.Wait()
 }
+
+// Execute synchronous functions asynchronously in a wrapper,
+func ExecuteSyncFuncAsync() {
+	chan1 := make(chan string)
+
+	hello := func(s string) string {
+		return fmt.Sprintf("Hello %s!", s)
+	}
+
+	wrapper := func(s string, c chan string) {
+		c <- hello(s)
+	}
+
+	go wrapper("world", chan1)
+
+	go func(s string, c chan string) {
+		c <- hello(s)
+	}("Go", chan1)
+
+	for i := 0; i < 2; i++ {
+		fmt.Println(<-chan1)
+	}
+}
