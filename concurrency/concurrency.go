@@ -111,7 +111,7 @@ func Channels2() {
 	wg.Wait()
 }
 
-// Execute synchronous functions asynchronously in a wrapper,
+// Execute synchronous functions asynchronously in a wrapper.
 func ExecuteSyncFuncAsync() {
 	chan1 := make(chan string)
 
@@ -131,5 +131,27 @@ func ExecuteSyncFuncAsync() {
 
 	for i := 0; i < 2; i++ {
 		fmt.Println(<-chan1)
+	}
+}
+
+// Close channel.
+func CloseChannel() {
+	addChan := make(chan int)
+
+	add10 := func(c chan int) {
+		total := 0
+
+		for i := 0; i < 10; i++ {
+			total += i
+		}
+
+		c <- total
+		close(c)
+	}
+
+	go add10(addChan)
+
+	for val := range addChan {
+		fmt.Println("Value: ", val)
 	}
 }
