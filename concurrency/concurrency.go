@@ -155,3 +155,42 @@ func CloseChannel() {
 		fmt.Println("Value: ", val)
 	}
 }
+
+// SelectMultipleChannels
+func SelectMultipleChannels() {
+	addChan := make(chan int)
+	mulChan := make(chan int)
+	channels := [](chan int){addChan, mulChan}
+
+	add10 := func(c chan int) {
+		total := 0
+
+		for i := 0; i < 10; i++ {
+			total += i
+		}
+
+		c <- total
+	}
+
+	mul10 := func(c chan int) {
+		total := 1
+
+		for i := 1; i < 10; i++ {
+			total *= i
+		}
+
+		c <- total
+	}
+
+	go add10(addChan)
+	go mul10(mulChan)
+
+	for range channels {
+		select {
+		case addVal := <-addChan:
+			fmt.Println("rcv add10:", addVal)
+		case mulVal := <-mulChan:
+			fmt.Println("rcv mul10:", mulVal)
+		}
+	}
+}
