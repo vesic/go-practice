@@ -41,3 +41,33 @@ func FilterEvenOdd() {
 	freq(isOdd, ints)
 	freq(isEven, ints)
 }
+
+// Using function types can be verbose and repetitive.
+// Type aliases can be used to assign a name to a function signature so
+// that types are not specified every time the fuction is used.
+func FunctionAliases() {
+	type arithmetic func(a, b int) int
+
+	add := func(a, b int) int {
+		fmt.Print("a + b = ")
+		return a + b
+	}
+
+	sub := func(a, b int) int {
+		fmt.Print("a - b = ")
+		return a - b
+	}
+
+	op := func() arithmetic {
+		if rand.Intn(2)%2 == 0 {
+			return add
+		}
+
+		return sub
+	}
+
+	func() {
+		a, b := rand.Intn(100), rand.Intn(100)
+		fmt.Println(op()(a, b))
+	}()
+}
