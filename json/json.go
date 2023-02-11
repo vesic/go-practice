@@ -73,6 +73,13 @@ func CustomEncoding() {
 
 // DecodingFromFile
 // Decode configuration from file
+/*
+{
+	"id": "v1",
+	"runtime": "python27",
+	"threadsafe": true
+}
+*/
 func DecodingFromFile() {
 	type Config struct {
 		Id         string
@@ -94,4 +101,46 @@ func DecodingFromFile() {
 
 	fmt.Println(config.Runtime)
 	// "python27"
+}
+
+// DecodingMultiConfigFromFile
+// Decode multiple configuration from file.
+/*
+[
+	{
+		"id": "v1",
+		"runtime": "python27",
+		"threadsafe": true
+	},
+	{
+		"id": "v2",
+		"runtime": "python3",
+		"threadsafe": true
+	}
+]
+*/
+func DecodingMultiConfigFromFile() {
+	type Config struct {
+		Id         string
+		Runtime    string
+		threadsafe bool
+	}
+	var config []Config
+
+	data, err := os.ReadFile("config.json")
+	if err != nil {
+		panic("file read error")
+	}
+
+	decoder := json.NewDecoder(strings.NewReader(string(data)))
+	err = decoder.Decode(&config)
+	if err != nil {
+		panic("json.Decode error")
+	}
+
+	for _, c := range config {
+		fmt.Println(c.Id, c.Runtime, c.threadsafe)
+	}
+	// v1 python27 false
+	// v2 python3 false
 }
