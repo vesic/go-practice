@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"math/rand"
+	"os"
 	"strings"
 )
 
@@ -68,4 +69,29 @@ func CustomEncoding() {
 	encoder.Encode(&user)
 	fmt.Println(builder.String())
 	// {"id":914288788548139488,"user_id":"Ervin","user_name":"ervin"}
+}
+
+// DecodingFromFile
+// Decode configuration from file
+func DecodingFromFile() {
+	type Config struct {
+		Id         string
+		Runtime    string
+		threadsafe bool
+	}
+	var config Config
+
+	data, err := os.ReadFile("config.json")
+	if err != nil {
+		panic("file read error")
+	}
+
+	decoder := json.NewDecoder(strings.NewReader(string(data)))
+	err = decoder.Decode(&config)
+	if err != nil {
+		panic("json.Decode error")
+	}
+
+	fmt.Println(config.Runtime)
+	// "python27"
 }
