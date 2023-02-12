@@ -66,12 +66,11 @@ func TypeAssertion() {
 	}
 
 	for _, val := range vals {
-		if i, ok := val.(*typeA); ok {
-			fmt.Println(i)
-		}
-
-		if i, ok := val.(*typeB); ok {
-			fmt.Println(i)
+		switch t := val.(type) {
+		case *typeA:
+			fmt.Println(t)
+		case *typeB:
+			fmt.Println(t)
 		}
 	}
 }
