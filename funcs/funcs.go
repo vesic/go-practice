@@ -71,3 +71,39 @@ func FunctionAliases() {
 		fmt.Println(op()(a, b))
 	}()
 }
+
+// ClosureCalcNextUser
+// Using closure to retreive the next user dynamically.
+func ClosureCalcNextUser() {
+	type user struct {
+		name string
+	}
+
+	users := []user{
+		{name: "John"},
+		{name: "Bob"},
+		{name: "Alice"},
+	}
+
+	getUser := func() func() user {
+		i := 0
+
+		currentUser := func() user {
+			if i == len(users)-1 {
+				i = 0
+			} else {
+				i++
+			}
+
+			return users[i]
+		}
+
+		return currentUser
+	}
+
+	get := getUser()
+
+	for i := 0; i < len(users)*2; i++ {
+		fmt.Printf("%v\n", get())
+	}
+}
